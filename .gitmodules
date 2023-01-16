@@ -1,0 +1,3 @@
+[submodule "submodules/linkml-model"]
+	path = submodules/linkml-model
+	url = ../linkml-model
