@@ -3,6 +3,7 @@ from typing import TextIO, Union, Optional, Callable, Dict, Type, Any, List
 
 from hbreader import FileInfo, hbread
 from jsonasobj2 import as_dict, JsonObj
+import jsonasobj2
 
 from linkml_runtime.utils.yamlutils import YAMLRoot
 
@@ -59,13 +60,12 @@ class Loader(ABC):
         else:
             data = source
         data_as_dict = loader(data, metadata)
+        # Note:  There is an equivalent bit of code in yamlutils that should match this
         if data_as_dict:
-            if isinstance(data_as_dict, list):
-                return [target_class(**as_dict(x)) for x in data_as_dict]
-            elif isinstance(data_as_dict, dict):
+            if jsonasobj2.is_list(data_as_dict):
+                return target_class(data_as_dict)
+            elif jsonasobj2.is_dict(data_as_dict):
                 return target_class(**data_as_dict)
-            elif isinstance(data_as_dict, JsonObj):
-                return [target_class(**as_dict(x)) for x in data_as_dict]
             else:
                 raise ValueError(f'Unexpected type {data_as_dict}')
         else:
