@@ -187,7 +187,8 @@ class YAMLRoot(JsonObj):
                     else:
                         # **kwargs
                         cooked_obj = slot_type(**as_dict(list_entry))
-                        order_up(cooked_obj[key_name], cooked_obj)
+                        if keyed:
+                            order_up(cooked_obj[key_name], cooked_obj)
                 elif isinstance(list_entry, list):
                     # *args
                     cooked_obj = slot_type(*list_entry)
